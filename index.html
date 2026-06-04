@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="COVE: Covariant Composition for Real-Time VLA Execution.">
+  <meta name="keywords" content="COVE, CoRL 2026, robotics, VLA, action chunks, real-time control, RTC, RoboCasa, LIBERO, LeRobot, PI05, GR00T-N1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COVE: Covariant Composition for Real-Time VLA Execution</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="#top"><strong>COVE</strong></a>
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="#abstract">Abstract</a>
+      <a class="navbar-item" href="#method">Method</a>
+      <a class="navbar-item" href="#hardware">Real Hardware</a>
+      <a class="navbar-item" href="#reactive">Reactive Ablation</a>
+      <a class="navbar-item" href="#simulation">Simulation</a>
+      <a class="navbar-item" href="#videos">Videos</a>
+      <a class="navbar-item" href="#bibtex">BibTeX</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero" id="top">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">COVE: Covariant Composition for Real-Time VLA Execution</h1>
+          <p class="subtitle is-4 publication-subtitle">
+            A controller-side compositor that turns asynchronous VLA action chunks into smooth, latency-aware command streams without policy retraining.
+          </p>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Anonymous Author(s)</span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Submitted to CoRL 2026</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block"><a href="#" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-file-pdf"></i></span><span> Paper (Comming soon)</span></a></span>
+              <span class="link-block"><a href="#" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-file-alt"></i></span><span>Appendix</span></a></span>
+              <span class="link-block"><a href="#" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span></a></span>
+              <span class="link-block"><a href="#" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fab fa-github"></i></span><span>Code (Comming soon)</span></a></span>
+              <span class="link-block"><a href="#simulation" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-chart-line"></i></span><span>Results</span></a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-widescreen">
+    <div class="hero-body">
+      <img src="./static/images/fig2_real_bartender_handover.png" class="paper-figure hero-figure" alt="Real robot bartender handover with COVE">
+      <h2 class="subtitle has-text-centered">
+        COVE smooths asynchronous VLA chunks directly at the controller interface, enabling stable real-time execution on a moving-hand bartender handover task.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="abstract">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Vision-Language-Action policies often execute manipulation through short-horizon action chunks, but real-time deployment creates a mismatch: each chunk is conditioned on a delayed observation while the robot has already evolved by the time that chunk reaches the controller. Consecutive chunks can therefore disagree, creating discontinuities in the executed command stream.
+          </p>
+          <p>
+            COVE is a lightweight controller-side layer that converts asynchronous VLA outputs into continuous, reactive commands. It composes overlapping chunks using a covariant minimum-jerk rule that guarantees <span class="math-token">C<sup>2</sup></span> continuity at chunk boundaries, combines latency-aware lookahead with uncertainty-weighted mid-chunk observation fusion, requires no policy retraining, and runs in under 100&nbsp;µs. Across simulation/replay and real hardware, COVE reduces chunk-boundary velocity jumps while preserving or improving task success.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="method">
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Method Overview</h2>
+    <figure class="paper-figure-block">
+      <img src="./static/images/fig1_cove_method_overview.png" class="paper-figure" alt="COVE turns delayed VLA chunks into smooth controller-ready commands">
+      <figcaption>
+        <strong>Figure 1.</strong> COVE turns delayed VLA chunks into a smooth, controller-ready command. Naive replace-on-arrival exposes chunk disagreement as position, velocity, and acceleration discontinuities; COVE composes overlapping chunks over a short blend window into a continuous command stream.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section" id="hardware">
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Real Hardware: Bartender Handover</h2>
+    <figure class="paper-figure-block">
+      <img src="./static/images/fig2_real_bartender_handover.png" class="paper-figure" alt="Real bartender handover deployment">
+      <figcaption>
+        <strong>Figure 2.</strong> A fine-tuned GR00T-N1 policy emits action chunks for a spoken-drink-into-moving-hand task while COVE runs at the EtherCAT master at 1&nbsp;kHz. The same policy and chunks are used across execution conditions; only the actuator-interface composition changes.
+      </figcaption>
+    </figure>
+
+    <p class="has-text-centered metric-note">
+      The hardware policy is a fine-tuned GR00T-N1 policy evaluated on 200 held-out real-robot trials per execution condition. Lower p95 velocity jump and peak torque are better; success is reported with 95% binomial confidence-interval half-width.
+    </p>
+    <div class="table-container results-table-container">
+      <table class="table is-striped is-hoverable is-fullwidth results-table paper-results-table">
+        <thead><tr><th>Execution layer</th><th>p95 vel. jump [rad/s] ↓</th><th>Peak torque [Nm] ↓</th><th>Success [%] ↑</th></tr></thead>
+        <tbody>
+          <tr><td>Replace-on-arrival</td><td>4.82</td><td>48.5</td><td>60.0 ± 6.8</td></tr>
+          <tr><td>RTC only</td><td>1.12</td><td>18.6</td><td>68.0 ± 6.5</td></tr>
+          <tr class="is-selected-row"><td>COVE (ours)</td><td>0.65</td><td>14.1</td><td>70.0 ± 6.4</td></tr>
+          <tr class="is-selected-row"><td>COVE⊕RTC</td><td><strong>0.58</strong></td><td><strong>13.4</strong></td><td><strong>72.0 ± 6.2</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="reactive">
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Reactive Input Ablation</h2>
+    <p class="has-text-centered metric-note">
+      Appendix real-robot ablation: 50 trials per condition on the bartender handover platform. The same fine-tuned policy and platform are used while toggling COVE's reactive input.
+    </p>
+    <div class="table-container results-table-container reactive-table-container">
+      <table class="table is-striped is-hoverable is-fullwidth results-table paper-results-table">
+        <thead><tr><th>Execution layer</th><th>Final hand-target error [cm] ↓</th><th>Vel. jump [rad/s] ↓</th></tr></thead>
+        <tbody>
+          <tr><td>Replace-on-arrival</td><td>∼12.0</td><td>4.82</td></tr>
+          <tr><td>COVE, no reactive input</td><td>∼5.5</td><td>0.65</td></tr>
+          <tr class="is-selected-row"><td>COVE, full reactive</td><td><strong>∼1.5</strong></td><td><strong>0.50</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="simulation">
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Simulation / Replay Results</h2>
+    <p class="has-text-centered metric-note">
+      RoboCasa reports cached-chunk simulation/replay, while LIBERO reports the online PI05 rollout sweep. Lower command discontinuity is smoother; success is reported in percent.
+    </p>
+
+    <h3 class="title is-4">GR00T-N1.6 + GR1 on RoboCasa, 24 tasks</h3>
+    <div class="table-container results-table-container">
+      <table class="table is-striped is-hoverable is-fullwidth results-table paper-results-table">
+        <thead><tr><th>Execution layer</th><th>J<sub>v</sub> / Vel. jump [rad/s] ↓</th><th>Jerk ↓</th><th>Success [%] ↑</th></tr></thead>
+        <tbody>
+          <tr><td>Replace-on-arrival (R7)</td><td>18.36 ± 1.38</td><td>1.00 ± 0.15</td><td>42.9 ± 6.3</td></tr>
+          <tr><td>Temporal ensembling (R7)</td><td>8.79 ± 0.74</td><td>0.76 ± 0.14</td><td>40.8 ± 6.3</td></tr>
+          <tr><td>RTC only (R7) </td><td>6.80 ± 0.63</td><td>0.84 ± 0.15</td><td>44.6 ± 6.4</td></tr>
+          <tr class="is-selected-row"><td>COVE (ours)</td><td>3.92 ± 0.31</td><td>1.00 ± 0.20</td><td>40.1 ± 6.2</td></tr>
+          <tr class="is-selected-row"><td>COVE⊕RTC</td><td><strong>2.35 ± 0.26</strong></td><td>0.86 ± 0.17</td><td>43.8 ± 6.4</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="title is-4">PI05 + LIBERO online rollout, 10-task suite</h3>
+    <p class="metric-note">
+      This table keeps the current LIBERO result used in our LeRobot retargeting sweep. The COVE blend window is
+      <span class="math-token">T<sub>b</sub> = 5-12&nbsp;ms</span>. Env-action jump measures the actual 80&nbsp;Hz action discontinuity sent to the LIBERO simulator; lower is smoother.
+    </p>
+    <div class="table-container results-table-container">
+      <table class="table is-striped is-hoverable is-fullwidth results-table paper-results-table">
+        <thead><tr><th>Execution layer</th><th>Env-action jump ↓</th><th>Success [%] ↑</th></tr></thead>
+        <tbody>
+          <tr><td>Replace-on-arrival (R7)</td><td>0.95</td><td>72.7</td></tr>
+          <tr><td>Temporal ensembling (R7)</td><td>0.45</td><td>56.8</td></tr>
+          <tr><td>RTC only (R7)</td><td>0.58</td><td>73.5</td></tr>
+          <!-- SE3 baseline rows omitted for now to match the RoboCasa table, which does not include separate SE3 baseline variants.
+          <tr><td>Replace-on-arrival (SE3)</td><td>0.88</td><td>73.0</td></tr>
+          <tr><td>Temporal ensembling (SE3)</td><td>0.49</td><td>58.2</td></tr>
+          <tr><td>RTC only (SE3)</td><td>0.61</td><td><strong>76.3</strong></td></tr>
+          -->
+          <tr class="is-selected-row"><td>COVE (ours)</td><td>0.33</td><td>67.7</td></tr>
+          <tr class="is-selected-row"><td>COVE⊕RTC</td><td><strong>0.30</strong></td><td>75.3</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="title is-4">LIBERO COVE blend-window ablation</h3>
+    <p class="metric-note">
+      Only COVE-based methods use the Hermite blend window. Shorter windows preserve tracking; longer windows reduce executed-command jumps but can introduce spatial lag.
+    </p>
+    <div class="table-container results-table-container">
+      <table class="table is-striped is-hoverable is-fullwidth results-table paper-results-table">
+        <thead><tr><th>Execution layer</th><th>Blend window</th><th>Env-action jump ↓</th><th>Success [%] ↑</th></tr></thead>
+        <tbody>
+          <tr><td>COVE (ours)</td><td>2-6 ms</td><td>0.86</td><td>74.7</td></tr>
+          <tr><td>COVE⊕RTC</td><td>2-6 ms</td><td>0.56</td><td><strong>75.7</strong></td></tr>
+          <tr><td>COVE (ours)</td><td>5-12 ms</td><td>0.33</td><td>67.7</td></tr>
+          <tr class="is-selected-row"><td>COVE⊕RTC</td><td>5-12 ms</td><td>0.30</td><td>75.3</td></tr>
+          <tr><td>COVE (ours)</td><td>8-20 ms</td><td><strong>0.26</strong></td><td>61.5</td></tr>
+          <tr><td>COVE⊕RTC</td><td>8-20 ms</td><td>0.27</td><td>68.0</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="videos">
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Simulation Videos</h2>
+    <p class="has-text-centered metric-note">
+      LIBERO-10 qualitative rollouts using the 5-12 ms blend-window setting. The baseline execution layers are included in the same task carousel for side-by-side inspection.
+    </p>
+    <div class="task-video-block">
+      <div class="task-command">
+        <p class="heading">LIBERO-10 Task 2 Command</p>
+        <p>Turn on the stove and put the moka pot on it.</p>
+      </div>
+      <div class="gallery-frame task-gallery-frame">
+        <div class="carousel gallery-carousel task-carousel">
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_2__replace-on-arrival__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_2__temporal_ensembling__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_2__rtc_only__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_2__replace-on-arrival_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal SE3 - Fail</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_2__temporal_ensembling_se3__fail.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_2__rtc_only_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_2__cove_ours__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE+RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_2__cove+rtc__success.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+    </div>
+    <!-- Task 4 omitted until exact LIBERO command text is available.
+    <div class="task-video-block">
+      <div class="task-command">
+        <p class="heading">LIBERO-10 Task 4 Command</p>
+        <p>Selected LIBERO-10 task 4; both COVE variants succeed under the 5-12 ms blend window.</p>
+      </div>
+      <div class="gallery-frame task-gallery-frame">
+        <div class="carousel gallery-carousel task-carousel">
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_4__replace-on-arrival__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal - Fail</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_4__temporal_ensembling__fail.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_4__rtc_only__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_4__replace-on-arrival_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal SE3 - Fail</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_4__temporal_ensembling_se3__fail.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_4__rtc_only_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_4__cove_ours__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE+RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_4__cove+rtc__success.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+    </div>
+
+    -->
+    <div class="task-video-block">
+      <div class="task-command">
+        <p class="heading">LIBERO-10 Task 5 Command</p>
+        <p>Pick up the book and place it in the back compartment of the caddy.</p>
+      </div>
+      <div class="gallery-frame task-gallery-frame">
+        <div class="carousel gallery-carousel task-carousel">
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_5__replace-on-arrival__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal - Fail</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_5__temporal_ensembling__fail.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_5__rtc_only__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_5__replace-on-arrival_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_5__temporal_ensembling_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_5__rtc_only_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_5__cove_ours__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE+RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_5__cove+rtc__success.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+    </div>
+    <!-- Task 6 omitted until exact LIBERO command text is available.
+    <div class="task-video-block">
+      <div class="task-command">
+        <p class="heading">LIBERO-10 Task 6 Command</p>
+        <p>Selected LIBERO-10 task 6; both COVE variants succeed under the 5-12 ms blend window.</p>
+      </div>
+      <div class="gallery-frame task-gallery-frame">
+        <div class="carousel gallery-carousel task-carousel">
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_6__replace-on-arrival__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_6__temporal_ensembling__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_6__rtc_only__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_6__replace-on-arrival_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_6__temporal_ensembling_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_6__rtc_only_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_6__cove_ours__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE+RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_6__cove+rtc__success.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+    </div>
+
+    -->
+    <div class="task-video-block">
+      <div class="task-command">
+        <p class="heading">LIBERO-10 Task 8 Command</p>
+        <p>Put both moka pots on the stove.</p>
+      </div>
+      <div class="gallery-frame task-gallery-frame">
+        <div class="carousel gallery-carousel task-carousel">
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_8__replace-on-arrival__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal - Fail</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_8__temporal_ensembling__fail.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC - Fail</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_8__rtc_only__fail.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_8__replace-on-arrival_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_8__temporal_ensembling_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_8__rtc_only_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_8__cove_ours__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE+RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_8__cove+rtc__success.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="task-video-block">
+      <div class="task-command">
+        <p class="heading">LIBERO-10 Task 9 Command</p>
+        <p>Put the yellow and white mug in the microwave and close it.</p>
+      </div>
+      <div class="gallery-frame task-gallery-frame">
+        <div class="carousel gallery-carousel task-carousel">
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_9__replace-on-arrival__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_9__temporal_ensembling__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_9__rtc_only__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Replace SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_9__replace-on-arrival_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>Temporal SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_9__temporal_ensembling_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>RTC SE3 - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_9__rtc_only_se3__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_9__cove_ours__success.mp4" type="video/mp4"></video></div></div>
+          <div class="gallery-slide"><div class="video-card gallery-card"><h4>COVE+RTC - Success</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/libero/5_12/libero_10_9__cove+rtc__success.mp4" type="video/mp4"></video></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" id="bibtex">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{anonymous2026cove,
+  title     = {COVE: Covariant Composition for Real-Time VLA Execution},
+  author    = {Anonymous Author(s)},
+  booktitle = {Submitted to the Conference on Robot Learning},
+  year      = {2026}
+}</code></pre>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3 has-text-centered">Acknowledgements</h2>
+    <p>This project page is prepared for review. Code, videos, and metadata will be linked after release.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link" href="./static/pdfs/cove_corl_2026.pdf"><i class="fas fa-file-pdf"></i></a>
+      <a class="icon-link" href="#"><i class="fab fa-github"></i></a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>This page borrows the structure of the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies website template</a>. Please keep template attribution in derived pages.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
