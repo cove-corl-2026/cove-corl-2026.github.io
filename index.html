@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css?v=teaser-fix-2">
+  <link rel="stylesheet" href="./static/css/index.css?v=teaser-fix-3">
   <link rel="icon" href="./static/images/favicon.svg">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -76,10 +76,10 @@
           <div class="column has-text-centered">
             <div class="publication-links">
               <span class="link-block"><a href="#" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-file-pdf"></i></span><span> Paper (Comming soon)</span></a></span>
-              <span class="link-block"><a href="#" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-file-alt"></i></span><span>Appendix</span></a></span>
+              <!-- <span class="link-block"><a href="#" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-file-alt"></i></span><span>Appendix</span></a></span> -->
               <span class="link-block"><a href="#" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span></a></span>
               <span class="link-block"><a href="#" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fab fa-github"></i></span><span>Code (Comming soon)</span></a></span>
-              <span class="link-block"><a href="#simulation" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-chart-line"></i></span><span>Results</span></a></span>
+              <span class="link-block"><a href="#hardware" class="external-link button is-normal is-rounded is-dark"><span class="icon"><i class="fas fa-chart-line"></i></span><span>Results</span></a></span>
             </div>
           </div>
         </div>
@@ -261,11 +261,11 @@
       <table class="table is-striped is-hoverable is-fullwidth results-table paper-results-table">
         <thead><tr><th>Execution layer</th><th>Blend window</th><th>Env-action jump ↓</th><th>Success [%] ↑</th></tr></thead>
         <tbody>
-          <tr><td>COVE (ours)</td><td>2-6 ms</td><td>0.86</td><td>74.7</td></tr>
+          <tr><td>COVE</td><td>2-6 ms</td><td>0.86</td><td>74.7</td></tr>
           <tr><td>COVE⊕RTC</td><td>2-6 ms</td><td>0.56</td><td><strong>75.7</strong></td></tr>
-          <tr><td>COVE (ours)</td><td>5-12 ms</td><td>0.33</td><td>67.7</td></tr>
+          <tr><td>COVE</td><td>5-12 ms</td><td>0.33</td><td>67.7</td></tr>
           <tr class="is-selected-row"><td>COVE⊕RTC</td><td>5-12 ms</td><td>0.30</td><td>75.3</td></tr>
-          <tr><td>COVE (ours)</td><td>8-20 ms</td><td><strong>0.26</strong></td><td>61.5</td></tr>
+          <tr><td>COVE</td><td>8-20 ms</td><td><strong>0.26</strong></td><td>61.5</td></tr>
           <tr><td>COVE⊕RTC</td><td>8-20 ms</td><td>0.27</td><td>68.0</td></tr>
         </tbody>
       </table>
@@ -403,8 +403,8 @@
       Extra real-robot videos for qualitative inspection. These are auxiliary media and are kept separate from the main quantitative hardware table.
     </p>
     <div class="real-video-grid aux-real-grid">
-      <div class="video-card"><h4>Real-robot COVE 1</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/vr_h3/aux_real_cove_1.mp4" type="video/mp4"></video></div>
-      <div class="video-card"><h4>Real-robot COVE 2</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/vr_h3/aux_real_cove_2.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><h4>Real-robot picking with COVE</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/vr_h3/aux_real_cove_1.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><h4>Real-robot placing with COVE</h4><video controls muted playsinline preload="metadata"><source src="./static/videos/vr_h3/aux_real_cove_2.mp4" type="video/mp4"></video></div>
     </div>
   </div>
 </section>
