@@ -10,8 +10,8 @@ $(document).ready(function() {
     bulmaCarousel.attach('.gallery-carousel', {
       slidesToScroll: 1,
       slidesToShow: window.innerWidth < 768 ? 1 : 3,
-      loop: true,
-      infinite: true,
+      loop: false,
+      infinite: false,
       autoplay: false,
       autoplaySpeed: 3000,
     });
